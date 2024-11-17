@@ -1,13 +1,27 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { theme } from './theme';
 
 export default function App() {
+  const handleDelete = () => {
+    Alert.alert('Are you sure you want to delete this?', '', [
+      {
+        text: 'Yes',
+        onPress: () => console.log('Deleting...'),
+        style: 'destructive',
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.itemContaier}>
         <Text style={styles.itemText}>Coffee</Text>
         <TouchableOpacity
-          onPress={() => console.log('Pressed')}
+          onPress={handleDelete}
           style={styles.deleteBtn}
           activeOpacity={0.8}
         >
