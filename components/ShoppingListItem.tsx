@@ -1,5 +1,6 @@
 import { Alert, TouchableOpacity, View, StyleSheet, Text } from 'react-native';
-import { theme } from '../theme';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Entypo from '@expo/vector-icons/Entypo';
 
 type Props = {
   name: string;
@@ -28,15 +29,16 @@ export function ShoppingListItem({ name, isCompleted }: Props) {
         isCompleted && styles.completedItemContainer,
       ]}
     >
+      <Entypo name={isCompleted ? 'check' : 'circle'} size={24} color="black" />
       <Text style={[styles.itemText, isCompleted && styles.completedText]}>
         {name}
       </Text>
-      <TouchableOpacity
-        onPress={handleDelete}
-        style={[styles.deleteBtn, isCompleted && styles.completedDeleteBtn]}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.deleteBtnText}>Delete</Text>
+      <TouchableOpacity onPress={handleDelete} activeOpacity={0.5}>
+        <FontAwesome
+          name="close"
+          size={24}
+          color={isCompleted ? 'grey' : 'red'}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -55,18 +57,8 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 18,
     fontWeight: '400',
-  },
-  deleteBtn: {
-    backgroundColor: theme.colorBlack,
-    color: theme.colorWhite,
-    padding: 8,
-    borderRadius: 6,
-  },
-  deleteBtnText: {
-    color: theme.colorWhite,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    marginRight: 'auto',
+    marginLeft: 15,
   },
   // Completed item styles
   completedItemContainer: {
@@ -74,8 +66,5 @@ const styles = StyleSheet.create({
   },
   completedText: {
     textDecorationLine: 'line-through',
-  },
-  completedDeleteBtn: {
-    backgroundColor: '#708090',
   },
 });
