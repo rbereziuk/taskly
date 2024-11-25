@@ -3,10 +3,12 @@ import { useState } from 'react';
 import { theme } from '../theme';
 import { ShoppingListItem } from '../components/ShoppingListItem';
 import { EmptyList } from '../components/EmptyList';
+import { orderList } from '../utils/orderList';
 
 type ShoppingList = {
   id: number;
   name: string;
+  lastUpdatedAt: number;
   completedAt?: number | null;
 };
 
@@ -20,6 +22,7 @@ export default function App() {
       {
         id: Date.now(),
         name: value,
+        lastUpdatedAt: Date.now(),
       },
       ...shoppingList,
     ];
@@ -36,6 +39,7 @@ export default function App() {
       if (item.id === id) {
         return {
           ...item,
+          lastUpdatedAt: Date.now(),
           completedAt: item.completedAt ? null : Date.now(),
         };
       } else {
@@ -51,7 +55,7 @@ export default function App() {
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
       stickyHeaderIndices={[0]}
-      data={shoppingList}
+      data={orderList(shoppingList)}
       renderItem={({ item }) => (
         <ShoppingListItem
           name={item.name}

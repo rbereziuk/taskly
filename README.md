@@ -14,3 +14,4 @@
 ## Improvemen
 
 - [ ] Add SQLite for storing data
+- [ ] Improve types in orderList function arguments
