@@ -1,6 +1,4 @@
-import { Link, Stack } from 'expo-router';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Pressable } from 'react-native';
+import { Stack } from 'expo-router';
 
 export default function CounterLayout() {
   return (
@@ -8,14 +6,8 @@ export default function CounterLayout() {
       <Stack.Screen
         name="index"
         options={{
+          headerShown: false,
           title: 'Counter',
-          headerRight: () => (
-            <Link href="/idea">
-              <Pressable hitSlop={20}>
-                <MaterialIcons name="history" size={32} />
-              </Pressable>
-            </Link>
-          ),
         }}
       />
       <Stack.Screen name="history" options={{ title: 'History' }} />

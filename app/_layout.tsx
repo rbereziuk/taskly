@@ -1,7 +1,10 @@
-import { Tabs } from 'expo-router';
+import { Link, Tabs } from 'expo-router';
 import Feather from '@expo/vector-icons/build/Feather';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { Pressable } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/build/MaterialIcons';
+import { theme } from '../theme';
 
 export default function Layout() {
   return (
@@ -26,7 +29,17 @@ export default function Layout() {
         name="counter"
         options={{
           title: 'Counter',
-          headerShown: false,
+          headerRight: () => (
+            <Link href="/counter/history" asChild style={{ marginRight: 10 }}>
+              <Pressable hitSlop={20}>
+                <MaterialIcons
+                  name="history"
+                  size={32}
+                  color={theme.colorPrimary}
+                />
+              </Pressable>
+            </Link>
+          ),
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="clockcircleo" color={color} size={size} />
           ),
