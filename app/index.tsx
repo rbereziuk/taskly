@@ -7,7 +7,7 @@ import { EmptyList } from '../components/EmptyList';
 type ShoppingList = {
   id: number;
   name: string;
-  isCompleted?: boolean;
+  completedAt?: number | null;
 };
 
 export default function App() {
@@ -31,6 +31,21 @@ export default function App() {
     setShoppingList(shoppingList.filter((item) => item.id !== id));
   };
 
+  const handleToggleComplete = (id: number) => {
+    const updatedList = shoppingList.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          completedAt: item.completedAt ? null : Date.now(),
+        };
+      } else {
+        return item;
+      }
+    });
+
+    setShoppingList(updatedList);
+  };
+
   return (
     <FlatList
       style={styles.container}
@@ -40,8 +55,9 @@ export default function App() {
       renderItem={({ item }) => (
         <ShoppingListItem
           name={item.name}
-          isCompleted={item.isCompleted}
+          isCompleted={Boolean(item.completedAt)}
           onDelete={() => handleDelete(item.id)}
+          onToggleComplete={() => handleToggleComplete(item.id)}
         />
       )}
       ListHeaderComponent={
