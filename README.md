@@ -10,3 +10,7 @@
     - https://github.com/expo/expo/issues/29489
     - https://github.com/software-mansion/react-native-screens/issues/2219
     - https://github.com/react-navigation/react-navigation/issues/12039
+
+## Improvemen
+
+- [ ] Add SQLite for storing data
