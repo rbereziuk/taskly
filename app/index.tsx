@@ -1,5 +1,6 @@
 import { StyleSheet, TextInput, FlatList, LayoutAnimation } from 'react-native';
 import { useEffect, useState } from 'react';
+import * as Haptics from 'expo-haptics';
 import { theme } from '../theme';
 import { ShoppingListItem } from '../components/ShoppingListItem';
 import { EmptyList } from '../components/EmptyList';
@@ -46,6 +47,7 @@ export default function App() {
   const handleDelete = (id: number) => {
     const updatedList = shoppingList.filter((item) => item.id !== id);
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setShoppingList(updatedList);
     storeData(updatedList);
   };
@@ -53,6 +55,11 @@ export default function App() {
   const handleToggleComplete = (id: number) => {
     const updatedList = shoppingList.map((item) => {
       if (item.id === id) {
+        if (item.completedAt) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        } else {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }
         return {
           ...item,
           lastUpdatedAt: Date.now(),
