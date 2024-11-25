@@ -1,7 +1,8 @@
-import { StyleSheet, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, FlatList } from 'react-native';
 import { useState } from 'react';
 import { theme } from '../theme';
 import { ShoppingListItem } from '../components/ShoppingListItem';
+import { EmptyList } from '../components/EmptyList';
 
 type ShoppingList = {
   id: number;
@@ -9,24 +10,8 @@ type ShoppingList = {
   isCompleted?: boolean;
 };
 
-const initialList: ShoppingList[] = [
-  {
-    id: 1,
-    name: 'Coffee',
-  },
-  {
-    id: 2,
-    name: 'Apple',
-  },
-  {
-    id: 3,
-    name: 'PlayStation 5',
-    isCompleted: true,
-  },
-];
-
 export default function App() {
-  const [shoppingList, setShoppingList] = useState<ShoppingList[]>(initialList);
+  const [shoppingList, setShoppingList] = useState<ShoppingList[]>([]);
   const [value, setValue] = useState('');
 
   const handleSubmit = () => {
@@ -43,27 +28,26 @@ export default function App() {
   };
 
   return (
-    <ScrollView
+    <FlatList
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
       stickyHeaderIndices={[0]}
-    >
-      <TextInput
-        value={value}
-        placeholder="E.g. Coffee"
-        onChangeText={setValue}
-        style={styles.textInput}
-        onSubmitEditing={handleSubmit}
-        blurOnSubmit={false}
-      />
-      {shoppingList.map((item) => (
-        <ShoppingListItem
-          name={item.name}
-          key={item.id}
-          isCompleted={item.isCompleted}
+      data={shoppingList}
+      renderItem={({ item }) => (
+        <ShoppingListItem name={item.name} isCompleted={item.isCompleted} />
+      )}
+      ListHeaderComponent={
+        <TextInput
+          value={value}
+          placeholder="E.g. Coffee"
+          onChangeText={setValue}
+          style={styles.textInput}
+          onSubmitEditing={handleSubmit}
+          blurOnSubmit={false}
         />
-      ))}
-    </ScrollView>
+      }
+      ListEmptyComponent={<EmptyList message="Shopping List is empy" />}
+    />
   );
 }
 
@@ -75,6 +59,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 24,
+    flexGrow: 1,
   },
   textInput: {
     borderWidth: 1,
