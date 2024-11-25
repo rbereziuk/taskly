@@ -18,7 +18,12 @@ export default function App() {
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    getData().then((list) => setShoppingList(list));
+    getData().then((list) => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      if (list) {
+        setShoppingList(list);
+      }
+    });
   }, []);
 
   const handleSubmit = () => {
