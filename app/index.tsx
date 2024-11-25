@@ -1,9 +1,10 @@
 import { StyleSheet, TextInput, FlatList } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { theme } from '../theme';
 import { ShoppingListItem } from '../components/ShoppingListItem';
 import { EmptyList } from '../components/EmptyList';
 import { orderList } from '../utils/orderList';
+import { getData, storeData } from '../utils/storage';
 
 type ShoppingList = {
   id: number;
@@ -16,6 +17,10 @@ export default function App() {
   const [shoppingList, setShoppingList] = useState<ShoppingList[]>([]);
   const [value, setValue] = useState('');
 
+  useEffect(() => {
+    getData().then((list) => setShoppingList(list));
+  }, []);
+
   const handleSubmit = () => {
     if (!value) return;
     const newShoppingList = [
@@ -27,11 +32,14 @@ export default function App() {
       ...shoppingList,
     ];
     setShoppingList(newShoppingList);
+    storeData(newShoppingList);
     setValue('');
   };
 
   const handleDelete = (id: number) => {
-    setShoppingList(shoppingList.filter((item) => item.id !== id));
+    const updatedList = shoppingList.filter((item) => item.id !== id);
+    setShoppingList(updatedList);
+    storeData(updatedList);
   };
 
   const handleToggleComplete = (id: number) => {
@@ -48,6 +56,7 @@ export default function App() {
     });
 
     setShoppingList(updatedList);
+    storeData(updatedList);
   };
 
   return (
