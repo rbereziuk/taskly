@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginRight: 'auto',
     marginLeft: 15,
+    flex: 1,
   },
   // Completed item styles
   completedItemContainer: {
