@@ -27,6 +27,10 @@ export default function App() {
     setValue('');
   };
 
+  const handleDelete = (id: number) => {
+    setShoppingList(shoppingList.filter((item) => item.id !== id));
+  };
+
   return (
     <FlatList
       style={styles.container}
@@ -34,7 +38,11 @@ export default function App() {
       stickyHeaderIndices={[0]}
       data={shoppingList}
       renderItem={({ item }) => (
-        <ShoppingListItem name={item.name} isCompleted={item.isCompleted} />
+        <ShoppingListItem
+          name={item.name}
+          isCompleted={item.isCompleted}
+          onDelete={() => handleDelete(item.id)}
+        />
       )}
       ListHeaderComponent={
         <TextInput
