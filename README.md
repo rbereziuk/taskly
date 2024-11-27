@@ -15,7 +15,12 @@
 
 - [ ] Add SQLite for storing data
 - [ ] Improve types in orderList function arguments
+- [ ] Replace buggy confetti package
 
 ## Bugs
 
 - [ ] on android, when I schedule notification after 10 sec, it continues repeating over and over again. On iOS on other hand works good but ignore `repeats: true` option
+
+## Additional
+
+The code in this project is based on the [React Native, v3](https://frontendmasters.com/courses/react-native-v3/) course from [Frontend Masters](https://frontendmasters.com/)
