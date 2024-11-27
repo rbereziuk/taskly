@@ -12,6 +12,7 @@ import { Button } from '../../components/Button';
 // 10 seconds from now
 //const frequency = Date.now() + 15 * 1000;
 const frequency = 10 * 1000;
+const TASK_NAME = 'Meditate';
 
 export const countdownStorageKey = 'taskly-countdown';
 
@@ -74,7 +75,7 @@ export default function CounterScreen() {
     if (permission === 'granted') {
       pushNotificationId = await Notifications.scheduleNotificationAsync({
         content: {
-          title: 'The thing is due!',
+          title: `${TASK_NAME} overdue!`,
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
@@ -115,9 +116,11 @@ export default function CounterScreen() {
       ]}
     >
       {!status.isOverdue ? (
-        <Text style={[styles.heading]}>Thing due in</Text>
+        <Text style={[styles.heading]}>{TASK_NAME} due in</Text>
       ) : (
-        <Text style={[styles.heading, styles.whiteText]}>Thing overdue by</Text>
+        <Text style={[styles.heading, styles.whiteText]}>
+          {TASK_NAME} overdue by
+        </Text>
       )}
       <View style={styles.segments}>
         <TimeSegment
@@ -142,15 +145,13 @@ export default function CounterScreen() {
         />
       </View>
 
-      <Button title="Schedule Notification" onPress={scheduleNotification} />
+      <Button title={`I've meditate`} onPress={scheduleNotification} />
 
       <Button
         title="Cancel notification"
         onPress={async () => {
           if (countdownState?.currentNotificationId) {
-            await Notifications.cancelScheduledNotificationAsync(
-              countdownState.currentNotificationId,
-            );
+            await Notifications.cancelAllScheduledNotificationsAsync();
           }
         }}
         style={{
