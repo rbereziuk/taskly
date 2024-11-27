@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 import { useEffect, useState } from 'react';
 import { intervalToDuration, isBefore } from 'date-fns';
 import { TimeSegment } from '../../components/TimeSegment';
 import { getData, storeData } from '../../utils/storage';
+import { Button } from '../../components/Button';
 
 // 10 seconds from now
 //const frequency = Date.now() + 15 * 1000;
@@ -135,7 +136,21 @@ export default function CounterScreen() {
         />
       </View>
 
-      <Button onPress={scheduleNotification} title="Schedule Notification" />
+      <Button title="Schedule Notification" onPress={scheduleNotification} />
+
+      <Button
+        title="Cancel notification"
+        onPress={async () => {
+          if (countdownState?.currentNotificationId) {
+            await Notifications.cancelScheduledNotificationAsync(
+              countdownState.currentNotificationId,
+            );
+          }
+        }}
+        style={{
+          marginTop: 10,
+        }}
+      />
     </View>
   );
 }
