@@ -1,8 +1,40 @@
-import { View, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
+import { useEffect, useState } from 'react';
+import { intervalToDuration, isBefore } from 'date-fns';
+import { TimeSegment } from '../../components/TimeSegment';
+
+// 10 seconds from now
+const timestamp = Date.now() + 15 * 1000;
+
+type CountdownStatus = {
+  isOverdue: boolean;
+  distance: ReturnType<typeof intervalToDuration>;
+};
 
 export default function CounterScreen() {
+  const [status, setStatus] = useState<CountdownStatus>({
+    isOverdue: false,
+    distance: {},
+  });
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const isOverdue = isBefore(timestamp, Date.now());
+      const distance = intervalToDuration(
+        isOverdue
+          ? { start: timestamp, end: Date.now() }
+          : { start: Date.now(), end: timestamp },
+      );
+      setStatus({ isOverdue, distance });
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   const scheduleNotification = async () => {
     const permission = await registerForPushNotificationsAsync();
 
@@ -25,7 +57,40 @@ export default function CounterScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        status.isOverdue && { backgroundColor: 'lightcoral' },
+      ]}
+    >
+      {!status.isOverdue ? (
+        <Text style={[styles.heading]}>Thing due in</Text>
+      ) : (
+        <Text style={[styles.heading, styles.whiteText]}>Thing overdue by</Text>
+      )}
+      <View style={styles.segments}>
+        <TimeSegment
+          unit="Days"
+          number={status.distance?.days ?? 0}
+          textStyle={status.isOverdue ? styles.whiteText : undefined}
+        />
+        <TimeSegment
+          unit="Hours"
+          number={status.distance.hours ?? 0}
+          textStyle={status.isOverdue ? styles.whiteText : undefined}
+        />
+        <TimeSegment
+          unit="Minutes"
+          number={status.distance?.minutes ?? 0}
+          textStyle={status.isOverdue ? styles.whiteText : undefined}
+        />
+        <TimeSegment
+          unit="Seconds"
+          number={status.distance?.seconds ?? 0}
+          textStyle={status.isOverdue ? styles.whiteText : undefined}
+        />
+      </View>
+
       <Button onPress={scheduleNotification} title="Schedule Notification" />
     </View>
   );
@@ -37,5 +102,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+  },
+  segments: {
+    flexDirection: 'row',
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    color: '#000',
+  },
+  whiteText: {
+    color: '#fff',
   },
 });
