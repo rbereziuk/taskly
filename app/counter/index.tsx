@@ -11,9 +11,9 @@ import { Button } from '../../components/Button';
 //const frequency = Date.now() + 15 * 1000;
 const frequency = 10 * 1000;
 
-const countdownStorageKey = 'taskly-countdown';
+export const countdownStorageKey = 'taskly-countdown';
 
-type PersistedCountdownState = {
+export type PersistedCountdownState = {
   currentNotificationId: string | undefined;
   completedAtTimestamps: number[];
 };
