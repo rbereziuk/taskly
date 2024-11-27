@@ -7,6 +7,8 @@ import { EmptyList } from '../components/EmptyList';
 import { orderList } from '../utils/orderList';
 import { getData, storeData } from '../utils/storage';
 
+const LIST_STORAGE_KEY = 'shopping-list';
+
 type ShoppingList = {
   id: number;
   name: string;
@@ -19,7 +21,7 @@ export default function App() {
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    getData().then((list) => {
+    getData(LIST_STORAGE_KEY).then((list) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       if (list) {
         setShoppingList(list);
@@ -40,7 +42,7 @@ export default function App() {
 
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShoppingList(newShoppingList);
-    storeData(newShoppingList);
+    storeData(LIST_STORAGE_KEY, newShoppingList);
     setValue('');
   };
 
@@ -49,7 +51,7 @@ export default function App() {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setShoppingList(updatedList);
-    storeData(updatedList);
+    storeData(LIST_STORAGE_KEY, updatedList);
   };
 
   const handleToggleComplete = (id: number) => {
@@ -72,7 +74,7 @@ export default function App() {
 
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShoppingList(updatedList);
-    storeData(updatedList);
+    storeData(LIST_STORAGE_KEY, updatedList);
   };
 
   return (
