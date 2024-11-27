@@ -15,3 +15,7 @@
 
 - [ ] Add SQLite for storing data
 - [ ] Improve types in orderList function arguments
+
+## Bugs
+
+- [ ] on android, when I schedule notification after 10 sec, it continues repeating over and over again. On iOS on other hand works good but ignore `repeats: true` option
