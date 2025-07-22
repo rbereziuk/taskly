@@ -2,7 +2,7 @@
 
 ## Todo
 
-- [ ] Fix header button press bug on Counter stack
+- [x] Fix header button press bug on Counter stack
   - When I added icon button to headerRight with link to history screen, link action don't work on press
   - Temporarily move this button to tab stack
   - Related links:
@@ -19,7 +19,8 @@
 
 ## Bugs
 
-- [ ] on android, when I schedule notification after 10 sec, it continues repeating over and over again. On iOS on other hand works good but ignore `repeats: true` option
+- [x] on android, when I schedule notification after 10 sec, it continues repeating over and over again. On iOS on other hand works good but ignore `repeats: true` option
+    - Remove notification package
 
 ## Additional
 
