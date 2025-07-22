@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, Alert, Dimensions } from 'react-native';
-import * as Notifications from 'expo-notifications';
 import * as Haptics from 'expo-haptics';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
@@ -17,7 +16,6 @@ const TASK_NAME = 'Meditate';
 export const countdownStorageKey = 'taskly-countdown';
 
 export type PersistedCountdownState = {
-  currentNotificationId: string | undefined;
   completedAtTimestamps: number[];
 };
 
@@ -35,7 +33,7 @@ export default function CounterScreen() {
     distance: {},
   });
 
-  const confettiRef = useRef<any>();
+  const confettiRef = useRef<any>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -68,35 +66,9 @@ export default function CounterScreen() {
 
   const scheduleNotification = async () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    const permission = await registerForPushNotificationsAsync();
 
-    let pushNotificationId;
-
-    if (permission === 'granted') {
-      pushNotificationId = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: `${TASK_NAME} overdue!`,
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: frequency / 1000,
-        },
-      });
-    } else {
-      Alert.alert(
-        'Unable to schedule notification',
-        'Enable the notifications permission for Expo Go in settings',
-      );
-    }
-
-    if (countdownState?.currentNotificationId) {
-      await Notifications.cancelScheduledNotificationAsync(
-        countdownState.currentNotificationId,
-      );
-    }
 
     const newCountdownState: PersistedCountdownState = {
-      currentNotificationId: pushNotificationId,
       completedAtTimestamps: countdownState
         ? [Date.now(), ...countdownState.completedAtTimestamps]
         : [Date.now()],
@@ -147,17 +119,6 @@ export default function CounterScreen() {
 
       <Button title={`I've meditate`} onPress={scheduleNotification} />
 
-      <Button
-        title="Cancel notification"
-        onPress={async () => {
-          if (countdownState?.currentNotificationId) {
-            await Notifications.cancelAllScheduledNotificationsAsync();
-          }
-        }}
-        style={{
-          marginTop: 10,
-        }}
-      />
       <ConfettiCannon
         ref={confettiRef}
         count={50}
